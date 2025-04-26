@@ -1,0 +1,44 @@
+# docker-compose.yml - Docker组合配置
+version: '3'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: checkin-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/checkin-app
+      - JWT_SECRET=your_jwt_secret_key_change_this_in_production
+      - JWT_EXPIRES_IN=30d
+    volumes:
+      - ./backend/uploads:/app/uploads
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: checkin-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:latest
+    container_name: checkin-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
