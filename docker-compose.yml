@@ -1,4 +1,4 @@
-# docker-compose.yml - Docker组合配置
+# docker-compose.yml - 修正后的Docker组合配置
 version: '3'
 
 services:
@@ -18,7 +18,7 @@ services:
       - JWT_SECRET=your_jwt_secret_key_change_this_in_production
       - JWT_EXPIRES_IN=30d
     volumes:
-      - ./backend/uploads:/app/uploads
+      - ./backend_data/uploads:/app/uploads
 
   frontend:
     build:
