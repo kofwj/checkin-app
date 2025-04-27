@@ -1,13 +1,33 @@
-# Dockerfile.backend - 后端Docker配置
+# Dockerfile.backend - 修正后的后端Docker配置
 FROM node:16-alpine
 
 WORKDIR /app
 
-COPY backend/package*.json ./
+# 先创建package.json文件
+RUN echo '{ \
+  "name": "checkin-backend", \
+  "version": "1.0.0", \
+  "description": "打卡接龙网站后端", \
+  "main": "app.js", \
+  "scripts": { \
+    "start": "node app.js" \
+  }, \
+  "dependencies": { \
+    "bcryptjs": "^2.4.3", \
+    "cors": "^2.8.5", \
+    "dotenv": "^16.0.3", \
+    "express": "^4.18.2", \
+    "jsonwebtoken": "^9.0.0", \
+    "mongoose": "^6.9.1", \
+    "multer": "^1.4.5-lts.1" \
+  } \
+}' > package.json
 
+# 安装依赖
 RUN npm install
 
-COPY backend/ ./
+# 复制后端代码
+COPY ./backend .
 
 # 创建上传目录
 RUN mkdir -p uploads
